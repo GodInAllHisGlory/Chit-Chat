@@ -5,7 +5,5 @@ import './index.css'
 import 'vite/modulepreload-polyfill'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <App />
-  </React.StrictMode>,
 )
