@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 # Load manifest when server launches
 MANIFEST = {}
+chatter_queue = []
 if not settings.DEBUG:
     f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
     MANIFEST = json.load(f)
@@ -28,4 +29,10 @@ def send_message(req):
     body = json.loads(req.body)
     message = body["message"]
     print(message)
-    return JsonResponse({"success": "True"})
+    return JsonResponse({"success": True})
+
+@login_required
+def queue_chatter(req):
+    chatter = json.loads(req.body)
+    chatter_queue.append(chatter)
+    print(chatter)
