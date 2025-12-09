@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import './App.css';
 import Message from './Message';
+import { Outlet } from 'react-router-dom';
 
 function App() {
+
   async function logout() {
     const res = await fetch("/registration/logout/", {
       credentials: "same-origin", // include cookies!
@@ -18,7 +20,7 @@ function App() {
 
   return (
     <>
-      <Message />
+      <Outlet />
       <button onClick={logout}>Logout</button>
     </>
   )
