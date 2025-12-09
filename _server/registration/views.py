@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
+from django.core import serializers
 
 # Create your views here.
 def sign_up(req):
@@ -14,6 +15,7 @@ def sign_up(req):
             last_name=req.POST.get("last_name")
         )
         login(req, user)
+        req.session['user'] = serializers.serialize('json', [user,])
         return redirect("/")
     else:
         return render(req, "registration/sign_up.html")
@@ -23,6 +25,8 @@ def sign_in(req):
         user = authenticate(req, username=req.POST.get("username"), password=req.POST.get("password"))
         if user is not None:
             login(req, user)
+            req.session['user'] = serializers.serialize('json', [user,])
+            print(serializers.serialize('json', [user,]))
             return redirect("/")
 
         return render(req, "registration/sign_in.html")
