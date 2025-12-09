@@ -4,7 +4,11 @@ function Home() {
     return(
         <div>
             <nav>
-                <Link to="/chat">Start Random Chat</Link>
+                <Link to={{
+                    pathname:"/chat",
+                    state: "kingkitkat"
+                    }}
+                    >Start Random Chat</Link>
             </nav>
             <Outlet />
         </div>

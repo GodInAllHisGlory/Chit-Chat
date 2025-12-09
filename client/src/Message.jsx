@@ -1,28 +1,25 @@
 import { useState, useEffect } from 'react'
 import * as cookie from "cookie";
 
-const id = "kingkitkat";
-const chatSocket = new WebSocket( //Makes a websocket to talk to the other person
-    'ws://'
-    + window.location.host
-    + '/chat/'
-    + id
-    + '/'
-);
-
-function Message() {
+function Message(props) {
+    const chatSocket = props.chatSocket;
     const [message, updateMessage] = useState("");
-    const [sentMessages, displayMessage] = useState("");
+    const [sentMessages, displayMessage] = useState([]);
+
     useEffect(() =>{
         chatSocket.onmessage = function(e) { //When a message is sent or recvied it's updated here
             const data = JSON.parse(e.data);
-            const updatedMessage = sentMessages + (data.message + "\n")
-            displayMessage(updatedMessage);
+            data.date = Date.now();
+            displayMessage((prev) => [...prev, data]);
         }
     },[])
 
      async function sendMessage(e) {
         e.preventDefault();
+
+        if(message === ""){
+            return;
+        }
 
         let sendMessage = JSON.stringify({
                     'message': message.trimEnd()
@@ -47,7 +44,9 @@ function Message() {
 
     return(
         <>
-            <span id="chat-log">{sentMessages}</span>
+            <div id="chat-log">{sentMessages.map(msg => (
+                <div key={msg.date}>{msg.message}</div>
+            ))}</div>
             <form onSubmit={sendMessage}>
                 <input type='text' value={message} onChange={(e) => updateMessage(e.target.value)}></input>
             </form>
