@@ -12,7 +12,16 @@
   </style>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <div id="header">
+    <span id="chit-chat">Chit Chat</span>
+    {% if request.path == '/registration/sign_in/' %}
+    <a href="/registration/sign_up/">Create New Account</a>
+    {% endif %}
+  </div>
+
+  <h2 id="welcome">Welcome to Chit Chat! Sign in or make an account and start chating!</h2>
+
+    {% block content %}
+    {% endblock %}
 </body>
 </html>
