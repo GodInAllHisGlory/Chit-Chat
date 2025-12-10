@@ -1,0 +1,30 @@
+#chat-log {
+    width: 350px;
+    height: 500px;
+    overflow-y:auto;
+    margin-bottom: 10px;
+    border-color: black;
+    border-style: none solid solid solid;
+    border-width: 3px;
+    background-color: rgb(231, 231, 231);
+}
+
+#chat-log > div {
+    width: 150px;
+    padding: 10px;
+    word-wrap: break-word;
+    margin: 10px;
+}
+
+.sent {
+    border-radius: 25px 25px 5px 25px;
+    background-color: lightgreen;
+    position: relative;
+    left: 150px;
+    text-align: end;
+}
+
+.received {
+    border-radius: 25px 25px 25px 5px;
+    background-color: lightblue;
+}

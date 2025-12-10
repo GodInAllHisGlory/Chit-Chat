@@ -20,8 +20,10 @@ function App() {
 
   return (
     <>
+      <div id="header"><span id="chit-chat">Chit Chat</span></div>
+      <button onClick={logout} id="logout">Logout</button>
       <Outlet />
-      <button onClick={logout}>Logout</button>
+      
     </>
   )
 }

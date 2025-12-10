@@ -1,0 +1,21 @@
+#message-view{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#message-view >  h2{
+    width: 330px;
+    border-color: black;
+    border-style: solid solid none solid;
+    border-width: 3px;
+    background-color: rgb(11, 129, 11);
+    color: white;
+    padding: 10px;
+    margin-bottom: 0;
+}
+
+#disconnect {
+    margin-top: 15px;
+}

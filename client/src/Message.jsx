@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react'
 import * as cookie from "cookie";
+import './Message.css'
 
 function Message(props) {
     const chatSocket = props.chatSocket;
+    const user = props.user;
     const [message, updateMessage] = useState("");
     const [sentMessages, displayMessage] = useState([]);
 
     useEffect(() =>{
-        chatSocket.onmessage = function(e) { //When a message is sent or recvied it's updated here
-            const data = JSON.parse(e.data);
-            data.date = Date.now();
-            displayMessage((prev) => [...prev, data]);
+        chatSocket.onmessage = function(e) { //When a message is sent or received it's updated here
+            const data = JSON.parse(e.data).message.split(" "); //gets the sender and message and breaks them up
+            const messageObj = {
+                message: data[0],
+                sender: data[1],
+                dateReceived: Date.now(),
+            }
+            displayMessage((prev) => [...prev, messageObj]);
         }
     },[])
 
@@ -18,12 +24,14 @@ function Message(props) {
         e.preventDefault();
 
         if(message === ""){
+            alert("Must have a message to send");
             return;
         }
 
         let sendMessage = JSON.stringify({
-                    'message': message.trimEnd()
+                    'message': message.trimEnd()+" "+user.user
                 });
+                console.log(sendMessage);
         chatSocket.send(sendMessage); //Actually sends the message
 
         // const res = await fetch("/send_message", {
@@ -41,14 +49,17 @@ function Message(props) {
         // }
         updateMessage("");
     }
-
     return(
         <>
             <div id="chat-log">{sentMessages.map(msg => (
-                <div key={msg.date}>{msg.message}</div>
+                <div key={msg.dateReceived} className={(msg.sender === user.user) ? "sent" : "received"}>{msg.message}</div>
             ))}</div>
             <form onSubmit={sendMessage}>
-                <input type='text' value={message} onChange={(e) => updateMessage(e.target.value)}></input>
+                <input type='text' value={message} onChange={(e) => {
+                    if(!(e.target.value.length > 150)){
+                        updateMessage(e.target.value)
+                    }
+                }}></input>
             </form>
         </>
     )
