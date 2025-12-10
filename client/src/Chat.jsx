@@ -61,6 +61,9 @@ function Chat() {
 
     function disconnect() { //Resets everything
         setIsReady(false);
+        socket.send(JSON.stringify({
+                    'message': `${user.user}/${user.user} has disconnected`
+                }));
         socket.close();
         user.chatId = "";
         user.partner = "";

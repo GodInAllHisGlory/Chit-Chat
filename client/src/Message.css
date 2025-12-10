@@ -16,7 +16,7 @@
     margin: 10px;
 }
 
-.sent {
+.received {
     border-radius: 25px 25px 5px 25px;
     background-color: lightgreen;
     position: relative;
@@ -24,7 +24,7 @@
     text-align: end;
 }
 
-.received {
+.sent {
     border-radius: 25px 25px 25px 5px;
     background-color: lightblue;
 }

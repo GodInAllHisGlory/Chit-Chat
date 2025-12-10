@@ -10,10 +10,13 @@ function Message(props) {
 
     useEffect(() =>{
         chatSocket.onmessage = function(e) { //When a message is sent or received it's updated here
-            const data = JSON.parse(e.data).message.split(" "); //gets the sender and message and breaks them up
+            const dataPrased = JSON.parse(e.data).message;
+            const message = dataPrased.slice(dataPrased.search("/")+1);
+            const sender = dataPrased.slice(0, dataPrased.search("/"));
+
             const messageObj = {
-                message: data[0],
-                sender: data[1],
+                message: message,
+                sender: sender,
                 dateReceived: Date.now(),
             }
             displayMessage((prev) => [...prev, messageObj]);
@@ -29,7 +32,7 @@ function Message(props) {
         }
 
         let sendMessage = JSON.stringify({
-                    'message': message.trimEnd()+" "+user.user
+                    'message': user.user+"/"+message.trimEnd()
                 });
                 console.log(sendMessage);
         chatSocket.send(sendMessage); //Actually sends the message
@@ -52,7 +55,7 @@ function Message(props) {
     return(
         <>
             <div id="chat-log">{sentMessages.map(msg => (
-                <div key={msg.dateReceived} className={(msg.sender === user.user) ? "sent" : "received"}>{msg.message}</div>
+                <div key={msg.dateReceived} className={(msg.sender == user.user) ? "sent" : "received"} id={console.log(msg.sender+" "+user.user)}>{msg.message}</div>
             ))}</div>
             <form onSubmit={sendMessage}>
                 <input type='text' value={message} onChange={(e) => {
