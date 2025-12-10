@@ -46,7 +46,6 @@ def queue_chatter(req):
 @login_required
 def match_maker(req):
     user = json.loads(req.body)
-
     for chatter in chatter_queue:
         if chatter['user'] == user['user']:
             userIndex = chatter_queue.index(chatter) #Make a refrence to where this element is so we can remove it when we find a partner
@@ -65,10 +64,9 @@ def match_maker(req):
             chatter['partner'] = user['user']
             user['chatId'] = chat_id
             user['partner'] = chatter['user']
-            print(userIndex);
+            print(userIndex)
             del chatter_queue[userIndex]
             break
-    print(f"\090[92m{chatter_queue}\033[0m")
     return JsonResponse(user) 
     
 def make_id():
