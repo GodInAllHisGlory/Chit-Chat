@@ -7,7 +7,7 @@ function Home() {
     const [blocked, setBlocked] = useState([])
 
     useEffect(() => {
-        async function get_blocked(){
+        async function get_blocked(){ //Gets blocked users to display
         const jsonBody = JSON.stringify({'user':context.user})
         const res = fetch("chat/get_blocked", {
                 method: "POST",
@@ -29,7 +29,7 @@ function Home() {
         get_blocked();
         },[])
 
-        function unblock(b){
+        function unblock(b){  //Unblocks users
             const updateBlocked = [...blocked];
             updateBlocked.splice(updateBlocked.indexOf(b),1);
             setBlocked(updateBlocked);
@@ -58,7 +58,7 @@ function Home() {
             <Outlet />
             <h2 id="blocked-message">Blocked Users</h2>
             <div id="blocked">
-                {blocked.map(b => (
+                {blocked.map(b => ( 
                     <div className="blocked" key={b}>
                         <h4 className="name">{b}</h4>
                         <button className="unblock-button" onClick={() => unblock(b)}>Unblock</button>

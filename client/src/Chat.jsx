@@ -37,7 +37,7 @@ function Chat() {
         )
     }
 
-     async function matchMake() {
+     async function matchMake() { //Constantly pings the chat/match_maker view to get a match
         const userJSON = JSON.stringify(user);
         while(user.chatId === ""){
             const res = await fetch("chat/match_maker", {
@@ -57,7 +57,7 @@ function Chat() {
         }
     }
 
-    function block(){
+    function block(){ //Sends a post request to block a user
         const block_body = JSON.stringify({
             'user': user.user,
             'chatter': user.partner

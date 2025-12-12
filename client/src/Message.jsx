@@ -39,7 +39,7 @@ function Message(props) {
     }
     return(
         <>
-            <div id="chat-log">{sentMessages.map(msg => (
+            <div id="chat-log">{sentMessages.map(msg => ( 
                 <div key={msg.dateReceived} className={(msg.sender == user.user) ? "sent" : "received"}>{msg.message}</div>
             ))}</div>
             <form onSubmit={sendMessage}>

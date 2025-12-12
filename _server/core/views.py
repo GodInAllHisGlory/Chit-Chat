@@ -30,7 +30,7 @@ def index(req):
     return render(req, "core/index.html", context)
 
 @login_required
-def block(req):
+def block(req): #Blocks someone by adding them to the blocked list made by the user
     body = json.loads(req.body)
     user = body["user"]
     chatter = body["chatter"]
@@ -57,14 +57,14 @@ def get_blocked(req):
     return JsonResponse({"blockedList": blocked_list.blocked})
 
 @login_required
-def queue_chatter(req):
+def queue_chatter(req): #Puts the person who made the request into a queue so they can find some one to match with
     chatter = json.loads(req.body)
     if chatter not in chatter_queue:
         chatter_queue.append(chatter)
     return JsonResponse(chatter)
 
 @login_required
-def match_maker(req):
+def match_maker(req): #Finds someone to match with by constantly having someone call this function
     user = json.loads(req.body)
     user_blocked = Blocked.objects.get(user=user['user'])
     for chatter in chatter_queue:
