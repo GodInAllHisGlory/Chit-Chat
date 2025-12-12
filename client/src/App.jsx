@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import './App.css';
 import Message from './Message';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 function App() {
 
@@ -20,8 +20,13 @@ function App() {
 
   return (
     <>
-      <div id="header"><span id="chit-chat">Chit Chat</span></div>
-      <button onClick={logout} id="logout">Logout</button>
+      <div id="header">
+        <nav>
+          <Link id="profile" to="/">{context.user}</Link>
+        </nav>
+        <span id="chit-chat">Chit Chat</span>
+        <button onClick={logout} id="logout">Logout</button>
+      </div>
       <Outlet />
       
     </>

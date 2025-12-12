@@ -34,28 +34,13 @@ function Message(props) {
         let sendMessage = JSON.stringify({
                     'message': user.user+"/"+message.trimEnd()
                 });
-                console.log(sendMessage);
         chatSocket.send(sendMessage); //Actually sends the message
-
-        // const res = await fetch("/send_message", {
-        //     method: "post",
-        //     credentials: "same-origin",
-        //     body: 
-        //         sendMessage,
-        //     headers:{
-        //         "Content-Type": "application/json",
-        //         "X-CSRFToken": cookie.parse(document.cookie).csrftoken,
-        //     }
-        // })
-        // if(!res.ok){
-        //     alert("Last message failed to send. Check your connection and try again.");
-        // }
         updateMessage("");
     }
     return(
         <>
             <div id="chat-log">{sentMessages.map(msg => (
-                <div key={msg.dateReceived} className={(msg.sender == user.user) ? "sent" : "received"} id={console.log(msg.sender+" "+user.user)}>{msg.message}</div>
+                <div key={msg.dateReceived} className={(msg.sender == user.user) ? "sent" : "received"}>{msg.message}</div>
             ))}</div>
             <form onSubmit={sendMessage}>
                 <input type='text' value={message} onChange={(e) => {

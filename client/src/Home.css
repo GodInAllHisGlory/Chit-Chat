@@ -1,0 +1,41 @@
+#new-chat {
+
+    background-color: rgb(11, 129, 11);
+    width: 370px;
+    margin: auto;
+    margin-top: 30px;
+    padding: 5px;
+}
+
+#chat-link, #chat-link:visited{
+    color: white;
+    font-size: 3em;
+}
+
+#blocked {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px;
+    overflow: scroll;
+    height: 500px;
+    background-color: rgb(231, 231, 231);;
+    width: 200px;
+    margin: auto;
+    margin-top: 10px;
+}
+
+.blocked {
+    margin: auto;
+    /* display: flex; */
+}
+
+.name {
+    text-align: center;
+}
+
+#blocked-message {
+    text-align: center;
+}
+

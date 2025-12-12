@@ -3,6 +3,8 @@
     padding-left: 10px;
     text-align: center;
     color: white;
+    display: flex;
+    justify-content: space-around;
 }
 
 #chit-chat {
@@ -10,10 +12,17 @@
     
 }
 
+#profile, #profile:visited{
+    font-size: 1.5em;
+    color: white;
+    margin-top: 10px;
+}
+
+nav {
+  margin-top: 10px;
+}
+
 #logout {
-  position: relative;
-  left: 92%;
-  bottom: 40px;
   border: none;
   background: none;
   padding: 0;

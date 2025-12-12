@@ -2,16 +2,16 @@ from django.shortcuts import render
 from django.conf  import settings
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+from .models import Blocked
 import json
 import os
 import string
 import random
-import time
 
 # Load manifest when server launches
 MANIFEST = {}
 chatter_queue = []
-open_rooms = []
 
 if not settings.DEBUG:
     f = open(f"{settings.BASE_DIR}/core/static/manifest.json")
@@ -30,11 +30,31 @@ def index(req):
     return render(req, "core/index.html", context)
 
 @login_required
-def send_message(req):
+def block(req):
     body = json.loads(req.body)
-    message = body["message"]
-    print(message)
+    user = body["user"]
+    chatter = body["chatter"]
+    blocked_list = Blocked.objects.get(user=user)
+    blocked_list.blocked += f"{chatter},"
+    blocked_list.save()
     return JsonResponse({"success": True})
+
+@login_required
+def unblock(req):
+    body = json.loads(req.body)
+    user = body["user"]
+    chatter = body["chatter"]
+    blocked_list = Blocked.objects.get(user=user)
+    blocked_list.blocked = blocked_list.blocked.replace(f"{chatter},","")
+    blocked_list.save()
+    return JsonResponse({"success": True})
+
+@login_required
+def get_blocked(req):
+    body = json.loads(req.body)
+    user = body["user"]
+    blocked_list = Blocked.objects.get(user=user)
+    return JsonResponse({"blockedList": blocked_list.blocked})
 
 @login_required
 def queue_chatter(req):
@@ -46,9 +66,14 @@ def queue_chatter(req):
 @login_required
 def match_maker(req):
     user = json.loads(req.body)
+    user_blocked = Blocked.objects.get(user=user['user'])
     for chatter in chatter_queue:
+        chatter_blocked = Blocked.objects.get(user=chatter['user'])
+
+        if(user['user'] in chatter_blocked.blocked or chatter['user'] in user_blocked.blocked):
+            pass
         if chatter['user'] == user['user']:
-            userIndex = chatter_queue.index(chatter) #Make a refrence to where this element is so we can remove it when we find a partner
+            userIndex = chatter #Make a refrence to where this element is so we can remove it when we find a partner
             if chatter['chatId'] != "":
                 chatter_queue.remove(chatter)
                 return JsonResponse(chatter) 
@@ -59,14 +84,16 @@ def match_maker(req):
     chat_id = make_id()
 
     for chatter in chatter_queue:
-        if chatter['user'] != user['user'] and chatter['chatId'] == "":
-            chatter['chatId'] = chat_id
-            chatter['partner'] = user['user']
-            user['chatId'] = chat_id
-            user['partner'] = chatter['user']
-            print(userIndex)
-            del chatter_queue[userIndex]
-            break
+        chatter_blocked = Blocked.objects.get(user=chatter['user'])
+
+        if(user['user'] not in chatter_blocked.blocked and chatter['user'] not in user_blocked.blocked):
+            if chatter['user'] != user['user'] and chatter['chatId'] == "":
+                chatter_queue.remove(userIndex)
+                chatter['chatId'] = chat_id
+                chatter['partner'] = user['user']
+                user['chatId'] = chat_id
+                user['partner'] = chatter['user']
+                break
     return JsonResponse(user) 
     
 def make_id():

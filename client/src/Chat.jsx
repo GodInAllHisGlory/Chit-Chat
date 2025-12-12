@@ -40,7 +40,6 @@ function Chat() {
      async function matchMake() {
         const userJSON = JSON.stringify(user);
         while(user.chatId === ""){
-            console.log("Working");
             const res = await fetch("chat/match_maker", {
                 method: "post",
                 credentials: "same-origin",
@@ -54,9 +53,27 @@ function Chat() {
             ).then(r => r.json());
             user.chatId = res.chatId
             user.partner = res.partner
-            console.log(res);
                 
         }
+    }
+
+    function block(){
+        const block_body = JSON.stringify({
+            'user': user.user,
+            'chatter': user.partner
+        });
+        fetch('chat/block',{
+                method: "post",
+                credentials: "same-origin",
+                body: 
+                    block_body,
+                    headers:{
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": cookie.parse(document.cookie).csrftoken,
+                    }
+                }
+            )
+            disconnect()
     }
 
     function disconnect() { //Resets everything
@@ -79,16 +96,21 @@ function Chat() {
     }
     
     function messageRender(){
+        let display;
         if(isReady){
-            return(
+             display = (
                 <div id="message-view">
                     <h2>Now talking to {user.partner}</h2>
                     <Message chatSocket={socket}
                             user={user}/>
                     <button id='disconnect' onClick={disconnect}>Disconnect</button>
+                    <button id='block' onClick={block}>Block</button>
                 </div>
-            )
+            );
+        }else {
+             display = (<h2 id="looking">Finding you someone to talk to</h2>);
         }
+        return display;
     }
     return(
         <div>

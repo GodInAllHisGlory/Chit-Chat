@@ -19,3 +19,12 @@
 #disconnect {
     margin-top: 15px;
 }
+
+#block {
+    margin-top: 30px;
+}
+
+#looking{
+    display: flex;
+    justify-content: center;
+}

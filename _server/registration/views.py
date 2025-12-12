@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
 from django.core import serializers
+from core.models import Blocked
 
 # Create your views here.
 def sign_up(req):
@@ -12,8 +13,10 @@ def sign_up(req):
             password=req.POST.get("password"),
             email=req.POST.get("email"),
             first_name=req.POST.get("first_name"),
-            last_name=req.POST.get("last_name")
+            last_name=req.POST.get("last_name"),
         )
+        blocked = Blocked(user=user.username)
+        blocked.save()
         login(req, user)
         req.session['user'] = serializers.serialize('json', [user,])
         return redirect("/")
