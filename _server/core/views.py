@@ -72,13 +72,11 @@ def match_maker(req): #Finds someone to match with by constantly having someone 
 
         if(user['user'] in chatter_blocked.blocked or chatter['user'] in user_blocked.blocked):
             pass
-        if chatter['user'] == user['user']:
-            userIndex = chatter #Make a refrence to where this element is so we can remove it when we find a partner
-            if chatter['chatId'] != "":
-                chatter_queue.remove(chatter)
-                return JsonResponse(chatter) 
-            else:
-                break
+        if chatter['user'] == user['user'] and chatter['chatId'] != "":
+            chatter_queue.remove(chatter) #Removes the user from the index
+            return JsonResponse(chatter) 
+        else:
+            break
                 
 
     chat_id = make_id()
@@ -88,7 +86,7 @@ def match_maker(req): #Finds someone to match with by constantly having someone 
 
         if(user['user'] not in chatter_blocked.blocked and chatter['user'] not in user_blocked.blocked):
             if chatter['user'] != user['user'] and chatter['chatId'] == "":
-                chatter_queue.remove(userIndex)
+                chatter_queue.remove(user)
                 chatter['chatId'] = chat_id
                 chatter['partner'] = user['user']
                 user['chatId'] = chat_id
